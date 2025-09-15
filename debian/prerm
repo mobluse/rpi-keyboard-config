@@ -1,0 +1,30 @@
+#!/bin/bash
+
+set -e
+
+case "$1" in
+    remove|upgrade|deconfigure)
+        # Remove udev rule
+        if [ -f /etc/udev/rules.d/99-rpi-keyboard.rules ]; then
+            rm -f /etc/udev/rules.d/99-rpi-keyboard.rules
+            echo "Removed udev rule for RPi keyboards"
+            
+            # Reload udev rules
+            if command -v udevadm >/dev/null 2>&1; then
+                udevadm control --reload-rules
+                udevadm trigger --subsystem-match=hidraw
+                echo "Reloaded udev rules"
+            fi
+        fi
+        ;;
+    
+    failed-upgrade)
+        ;;
+    
+    *)
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 1
+        ;;
+esac
+
+exit 0

@@ -1,0 +1,14 @@
+Source: rpi-keyboard-config
+Section: misc
+Priority: optional
+Maintainer: Mathew Blowers <mathew.blowers@raspberrypi.com>
+Build-Depends: debhelper (>= 12), dh-python, python3-setuptools, python3-all
+Standards-Version: 4.5.1
+X-Python3-Version: >= 3.8
+
+Package: rpi-keyboard-config
+Architecture: all
+Depends: ${python3:Depends}, ${misc:Depends}, libhidapi-hidraw0
+Description: RPi Keyboard Config
+ This package provides a command line interface and python library for configuring RPi Keyboards.
+ It allows you to change the keyboard's keymaps and control the RGB leds on supported keyboards.
