@@ -4,6 +4,7 @@ import struct
 import time
 from typing import Any, Dict, List, Optional, Tuple, Union
 
+from .atco_s import at, co
 from .hid import Device, enumerate_devices, HIDException
 from .keycodes import qmk_keycode_to_key, keyboard_ascii_art
 from .effects import get_vial_effect_id, get_vial_effect_name
@@ -197,7 +198,11 @@ class RPiKeyboardConfig():
         self._get_hid_interface(path)
 
         if self.model == "PI500":
-            self._led_map = None
+            leds = []
+            for idx in range(6*16):
+               x, y, flags, matrix = (0, 0, 0, [idx//16, idx%16])
+               leds.append(LED(idx=idx, matrix=matrix, flags=flags, x=x, y=y))
+            self._led_map = leds
             self.switch_matrix = SWITCH_MATRIX_PI500
             country_code = get_pi_country_code()
             self.variant = country_code
@@ -578,7 +583,7 @@ class RPiKeyboardConfig():
         Returns:
             LED index.
         """
-        if self.conversion_switch_matrix is None:
+        if self.conversion_switch_matrix is None or self.model == "PI500":
             position = matrix
         else:
             position = convert_switch_matrix(matrix, self.conversion_switch_matrix, self.switch_matrix)
@@ -594,7 +599,8 @@ class RPiKeyboardConfig():
             Number of LEDs.
         """
         if self.model == "PI500":
-            raise KeyboardNotCompatibleError("PI500 does not support RGB operations")
+            #raise KeyboardNotCompatibleError("PI500 does not support RGB operations")
+            return 6*16
         raw_data = self._send_check_command(CMD_LIGHTING_GET_VALUE, VIALRGB_GET_NUMBER_LEDS)
         num_leds = struct.unpack("<H", raw_data[2:4])[0]
         return num_leds
@@ -644,7 +650,23 @@ class RPiKeyboardConfig():
         Must be called after setting LED colours to apply changes.
         """
         if self.model == "PI500":
-            raise KeyboardNotCompatibleError("PI500 does not support RGB operations")
+            #raise KeyboardNotCompatibleError("PI500 does not support RGB operations")
+            leds = self._led_map
+            col = 7
+            for led in leds:
+                if led.colour == (60, 255, 255): # BIRD_COLOUR
+                    col = 3
+                elif led.colour == (120, 255, 200): # PIPE_COLOUR
+                    col = 6
+                elif led.colour == (0, 0, 0): # BG_COLOUR
+                    col = 9
+                elif led.colour == (190, 255, 255): # SCORE_COLOUR
+                    col = 5
+                elif led.colour == (0, 255, 255): # Red
+                    col = 1
+                print(end='%s%s '%(at(led.matrix[0], led.matrix[1]),co(0,col)))
+            print(end='%s%s'%(at(8, 0), co(0, 7)), flush=True)
+            return
 
         leds = self._led_map
         send_per_packet = 9
@@ -887,7 +909,8 @@ class RPiKeyboardConfig():
         LED colors.
         """
         if self.model == "PI500":
-            raise KeyboardNotCompatibleError("PI500 does not support RGB operations")
+            #raise KeyboardNotCompatibleError("PI500 does not support RGB operations")
+            return
         direct_effect = get_vial_effect_id("VIALRGB_EFFECT_DIRECT")
         preset = Preset(effect=direct_effect, speed=255, fixed_hue=True, hue=255, sat=255)
         self.set_temp_effect(preset=preset)
