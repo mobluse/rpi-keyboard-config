@@ -1,4 +1,17 @@
-# RPi Keyboard Config
+# RPi Keyboard Config with Flappy Bird Game for Raspberry Pi 500 w/o +
+
+## Installation and Run of Game
+
+```bash
+git clone https://github.com/mobluse/rpi-keyboard-config
+cd rpi-keyboard-config/src
+python -m RPiKeyboardConfig.game
+rpi-keyboard-config lock
+```
+On a Raspberry Pi 500 with updated keyboard firmware it will show the game animation in the terminal using VT100/ANSI escape codes.
+I have not tested this with a Raspberry Pi 500+, but its code was not changed intentionally. 
+
+## Original Introduction
 
 A Python library and command-line tool for configuring Raspberry Pi keyboards, including keymap customisation and RGB LED control.
 
