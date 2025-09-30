@@ -1080,4 +1080,4 @@ class RPiKeyboardConfig():
                 raise Exception(
                     "Unlock process is still in progress. "
                     "Nothing can be done until it is complete."
-                )
+                ) 
