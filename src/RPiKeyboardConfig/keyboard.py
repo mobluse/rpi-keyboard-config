@@ -198,11 +198,11 @@ class RPiKeyboardConfig():
         self._get_hid_interface(path)
 
         if self.model == "PI500":
-            print(end = csr(6, 16), flush = True)
+            print(end = csr(6, 14), flush = True)
             leds = []
             for idx in range(6*16):
                x, y, flags, matrix = (0, 0, 0, [idx//16, idx%16])
-               leds.append(LED(idx=idx, matrix=matrix, flags=flags, x=x, y=y))
+               leds.append(LED(idx = idx, matrix = matrix, flags = flags, x = x, y = y))
             self._led_map = leds
             self.switch_matrix = SWITCH_MATRIX_PI500
             country_code = get_pi_country_code()
