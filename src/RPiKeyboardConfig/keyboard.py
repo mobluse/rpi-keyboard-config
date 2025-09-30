@@ -4,7 +4,7 @@ import struct
 import time
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-from .atco_s import at, co
+from .atcosr import at, co, csr, rmsr, rbsr
 from .hid import Device, enumerate_devices, HIDException
 from .keycodes import qmk_keycode_to_key, keyboard_ascii_art
 from .effects import get_vial_effect_id, get_vial_effect_name
@@ -198,6 +198,7 @@ class RPiKeyboardConfig():
         self._get_hid_interface(path)
 
         if self.model == "PI500":
+            print(end = csr(6, 16), flush = True)
             leds = []
             for idx in range(6*16):
                x, y, flags, matrix = (0, 0, 0, [idx//16, idx%16])
@@ -350,6 +351,8 @@ class RPiKeyboardConfig():
         """
         if hasattr(self, '_device'):
             self._device.close()
+        if self.model == "PI500":
+            print(end = rmsr(), flush = True)
 
     def _send_command(self, command: List[int]) -> List[int]:
         """Send a command to the keyboard and return the response.
@@ -664,8 +667,8 @@ class RPiKeyboardConfig():
                     col = 5
                 elif led.colour == (0, 255, 255): # Red
                     col = 1
-                print(end='%s%s '%(at(led.matrix[0], led.matrix[1]),co(0,col)))
-            print(end='%s%s'%(at(8, 0), co(0, 7)), flush=True)
+                print(end = '%s%s  '%(at(led.matrix[0], 2*led.matrix[1]), co(0, col)))
+            print(end = '%s%s'%(at(rbsr(), 0), co(7, 0)), flush = True)
             return
 
         leds = self._led_map
