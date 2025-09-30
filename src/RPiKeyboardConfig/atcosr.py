@@ -1,4 +1,4 @@
-# AtCo (C) 2024 by Mikael O. Bonnier, Lund, Sweden. License: Same as the original repo.
+# AtCoSR (C) 2025 by Mikael O. Bonnier, Lund, Sweden. License: Same as the original repo.
 fgco=[30,91,32,93,94,95,96,97,92,37,90,31,33,35,34,36]
 bgco=fgco[:]
 for i in range(len(bgco)):
@@ -21,3 +21,17 @@ def shcu(on):
     return "\x1B[?25h"
   else:
     return "\x1B[?25l"
+
+_rbsr=0
+
+def rbsr():
+  global _rbsr
+  return _rbsr
+
+def csr(rt,rb):
+  global _rbsr
+  _rbsr=rb
+  return "\x1B[%d;%dr"%(rt+1,rb+1)
+
+def rmsr():
+  return "\x1B[r"
