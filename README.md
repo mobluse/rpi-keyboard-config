@@ -1,13 +1,13 @@
 # RPi Keyboard Config with Flappy Bird Game for Raspberry Pi 500 w/o +
 
 ## Installation and Run of Game
-
 ```bash
 git clone https://github.com/mobluse/rpi-keyboard-config
 cd rpi-keyboard-config/src
 python -m RPiKeyboardConfig.game
 rpi-keyboard-config lock
 ```
+<img width="1280" height="996" alt="2025-09-30-205235_1280x996_scrot" src="https://github.com/user-attachments/assets/bd6bdb2c-52b5-4d4b-bda1-c988064e2229" />
 On a Raspberry Pi 500 with updated keyboard firmware it will show the game animation in the terminal using VT100/ANSI escape codes.
 I have not tested this with a Raspberry Pi 500+, but its code was not changed intentionally. 
 
