@@ -28,10 +28,11 @@ def rbsr():
   global _rbsr
   return _rbsr
 
-def csr(rt,rb):
+def csr(rt,rb,cl,cr):
   global _rbsr
   _rbsr=rb
-  return "\x1B[%d;%dr"%(rt+1,rb+1)
+  return "\x1B[?69h\x1B[%d;%dr\x1B[%d;%ds\x1B[%d;%d;%d;%d$z"%(rt+1,rb+1,cl+1,cr+1,rt+1,cl+1,rb+1,cr+1)
+  # DECLRMM (CSI?69h), DECSLRM (CSI;s), and DECERA (CSI;;;$z) needs VT420+/xterm to work; ignored otherwise.
 
 def rmsr():
-  return "\x1B[r"
+  return "\x1B[r\x1B[;s\x1B[?69l" # DECSLRM and DECLRMM as above.
