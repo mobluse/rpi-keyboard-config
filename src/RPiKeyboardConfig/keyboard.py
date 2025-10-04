@@ -198,7 +198,7 @@ class RPiKeyboardConfig():
         self._get_hid_interface(path)
 
         if self.model == "PI500":
-            print(end = csr(6, 15), flush = True)
+            print(end = csr(6, 15, 0, 31), flush = True)
             leds = []
             w = 16
             for idx in range(6*w):
